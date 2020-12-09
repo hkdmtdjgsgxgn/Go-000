@@ -65,6 +65,10 @@ func WriteResponse(w io.Writer, st Status, headers []Header, body io.Reader) err
 
 ![图片](https://uploader.shimo.im/f/8ifvg3tkqeN0Kb3Z.png!thumbnail?fileGuid=6RpJpp6kYqTxwyhx)
 
+Go 1.13 并没有把根因包装和保存，所以最终如果想要根因，我们还是要借助`pkg/errors`来实现，为什么没有加入`wrap`？官方表示会影响兼容。
+
+呐，我的作业里是`errors`和`pkg/errors`结合使用的。
+
 # Reference
 
 [https://dave.cheney.net/2012/01/18/why-go-gets-exceptions-right](https://dave.cheney.net/2012/01/18/why-go-gets-exceptions-right)
