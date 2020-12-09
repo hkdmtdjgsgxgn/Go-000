@@ -12,4 +12,6 @@ func main() {
 			fmt.Println(errors.Unwrap(err).Error())
 		}
 	}
+	// Output:
+	// biz error: sql: no rows in result set
 }
