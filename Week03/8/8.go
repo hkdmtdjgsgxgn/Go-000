@@ -50,7 +50,7 @@ var Wait sync.WaitGroup
 var Counter int = 0
 
 func main() {
-	for routine := 0; routine < 3; routine++ {
+	for routine := 1; routine < 3; routine++ {
 		Wait.Add(1)
 		go Routine(routine)
 	}
