@@ -1,4 +1,5 @@
 // 基于 errgroup 实现一个 http server 的启动和关闭 ，以及 linux signal 信号的注册和处理，要保证能够一个退出，全部注销退出。
+// Reference: The best practice in my opion : https://github.com/XYZ0901/Go-000/blob/main/Week03/work/main.go
 package main
 
 import (
@@ -19,37 +20,32 @@ func main() {
 	s := &http.Server{Addr: ":8081"}
 	g := new(errgroup.Group)
 	g.Go(func() error {
-		// Hello world, the web server
+		go func() {
+			serr <- s.ListenAndServe()
+		}()
 		helloHandler := func(w http.ResponseWriter, req *http.Request) {
 			io.WriteString(w, "Hello, world!\n")
 		}
-
-		http.HandleFunc("/hello", helloHandler)
-		go func() {
-			fmt.Println("Http Server start on 8081")
-			serr <- s.ListenAndServe()
-		}()
+		http.HandleFunc("/", helloHandler)
 		select {
 		case err := <-serr:
-			err = s.Shutdown(context.Background())
+			close(serr)
+			close(stop) // without close, it'll block at `a := <-stop`
 			return err
 		}
 	})
 
+	// server closed here
 	g.Go(func() error {
 		signal.Notify(stop, syscall.SIGINT|syscall.SIGTERM|syscall.SIGKILL)
-		<-stop
-		select {
-		case <-stop:
-			return s.Shutdown(context.Background())
+		if a := <-stop; a != nil {
+			fmt.Println("Got signal:", a)
 		}
+		return s.Shutdown(context.Background())
 	})
 	if err := g.Wait(); err == nil {
-		fmt.Println("http serve start.")
+		fmt.Println("working...")
 	} else {
-		fmt.Printf("errgroup: %v", err)
+		fmt.Printf("errgroup: %v\n", err)
 	}
-	close(stop)
-	close(serr)
-	fmt.Println(s.Close().Error())
 }
