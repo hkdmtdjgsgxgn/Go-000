@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 
 	"github.com/pkg/errors"
@@ -8,7 +9,7 @@ import (
 )
 
 func biz() error {
-	if err := dao.Dao(); err != nil {
+	if err := dao.Dao(); errors.Is(err, sql.ErrNoRows) {
 		return errors.Wrap(err, "biz error")
 	}
 	fmt.Println("biz done.")
