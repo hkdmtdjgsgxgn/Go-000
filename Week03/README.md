@@ -1,8 +1,8 @@
 # # Homework
 
->#学号: G20200607010680
->#班级: 1
->#作业链接:[https://github.com/hi20160616/Go-000/tree/main/Week03/homework](https://github.com/hi20160616/Go-000/tree/main/Week03/homework)
+>#学号: G20200607010680  
+>#班级: 1  
+>#作业链接:[https://github.com/hi20160616/Go-000/tree/main/Week03/homework](https://github.com/hi20160616/Go-000/tree/main/Week03/homework)  
 
 基于 errgroup 实现一个 http server 的启动和关闭 ，以及 linux signal 信号的注册和处理，要保证能够一个退出，全部注销退出。
 
