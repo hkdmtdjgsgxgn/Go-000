@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package hello.v1;
+
+option go_package = "github.com/hi20160616/Go-000/Week04/homework/api/hello";
+
+service Foobar{
+	rpc SayHello (HelloRequest) returns (HelloResponse){}
+}
+
+message HelloRequest {
+	string name = 1;
+}
+
+message HelloResponse {
+	string message = 1;
+}
