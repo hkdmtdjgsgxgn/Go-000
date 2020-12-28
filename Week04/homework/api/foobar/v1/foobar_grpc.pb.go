@@ -17,7 +17,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FoobarClient interface {
-	FoobarRpc(ctx context.Context, in *FoobarRequest, opts ...grpc.CallOption) (*FoobarReply, error)
+	RegisteFoobar(ctx context.Context, in *FoobarRequest, opts ...grpc.CallOption) (*FoobarReply, error)
 }
 
 type foobarClient struct {
@@ -28,9 +28,9 @@ func NewFoobarClient(cc grpc.ClientConnInterface) FoobarClient {
 	return &foobarClient{cc}
 }
 
-func (c *foobarClient) FoobarRpc(ctx context.Context, in *FoobarRequest, opts ...grpc.CallOption) (*FoobarReply, error) {
+func (c *foobarClient) RegisteFoobar(ctx context.Context, in *FoobarRequest, opts ...grpc.CallOption) (*FoobarReply, error) {
 	out := new(FoobarReply)
-	err := c.cc.Invoke(ctx, "/Foobar/FoobarRpc", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/Foobar/RegisteFoobar", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func (c *foobarClient) FoobarRpc(ctx context.Context, in *FoobarRequest, opts ..
 // All implementations must embed UnimplementedFoobarServer
 // for forward compatibility
 type FoobarServer interface {
-	FoobarRpc(context.Context, *FoobarRequest) (*FoobarReply, error)
+	RegisteFoobar(context.Context, *FoobarRequest) (*FoobarReply, error)
 	mustEmbedUnimplementedFoobarServer()
 }
 
@@ -49,8 +49,8 @@ type FoobarServer interface {
 type UnimplementedFoobarServer struct {
 }
 
-func (UnimplementedFoobarServer) FoobarRpc(context.Context, *FoobarRequest) (*FoobarReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FoobarRpc not implemented")
+func (UnimplementedFoobarServer) RegisteFoobar(context.Context, *FoobarRequest) (*FoobarReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisteFoobar not implemented")
 }
 func (UnimplementedFoobarServer) mustEmbedUnimplementedFoobarServer() {}
 
@@ -65,20 +65,20 @@ func RegisterFoobarServer(s grpc.ServiceRegistrar, srv FoobarServer) {
 	s.RegisterService(&Foobar_ServiceDesc, srv)
 }
 
-func _Foobar_FoobarRpc_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Foobar_RegisteFoobar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FoobarRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FoobarServer).FoobarRpc(ctx, in)
+		return srv.(FoobarServer).RegisteFoobar(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Foobar/FoobarRpc",
+		FullMethod: "/Foobar/RegisteFoobar",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FoobarServer).FoobarRpc(ctx, req.(*FoobarRequest))
+		return srv.(FoobarServer).RegisteFoobar(ctx, req.(*FoobarRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -91,8 +91,8 @@ var Foobar_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*FoobarServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "FoobarRpc",
-			Handler:    _Foobar_FoobarRpc_Handler,
+			MethodName: "RegisteFoobar",
+			Handler:    _Foobar_RegisteFoobar_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

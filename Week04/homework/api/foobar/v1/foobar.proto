@@ -3,7 +3,7 @@ syntax = "proto3";
 option go_package = "Week04/homework/api/foobar/v1;v1";
 
 service Foobar{
-	rpc FoobarRpc (FoobarRequest) returns (FoobarReply) {}
+	rpc RegisteFoobar (FoobarRequest) returns (FoobarReply) {}
 }
 
 message FoobarRequest {

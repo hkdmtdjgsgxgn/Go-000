@@ -16,7 +16,7 @@ const (
 )
 
 func main() {
-	conn, err := grpc.Dial(address, grpc.WithBlock(), grpc.WithInsecure())
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		log.Fatalf("cannot connect: %v", err)
 	}
@@ -24,11 +24,12 @@ func main() {
 
 	// grpc client
 	c := v1.NewFoobarClient(conn)
+
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 
 	// call rpc
-	r, err := c.FoobarRpc(ctx, &v1.FoobarRequest{Foo: foo, Bar: bar})
+	r, err := c.RegisteFoobar(ctx, &v1.FoobarRequest{Foo: foo, Bar: bar})
 	if err != nil {
 		log.Fatalf("register foobar failed: %v", err)
 	}
