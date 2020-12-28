@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option go_package = "Week04/homework/api/foobar/v1;v1";
+
+service Foobar{
+	rpc FoobarRpc (FoobarRequest) returns (FoobarReply) {}
+}
+
+message FoobarRequest {
+	string foo = 1;
+	int32 bar = 2;
+}
+
+message FoobarReply {
+	int32 id = 1;
+}
