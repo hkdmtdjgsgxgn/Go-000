@@ -24,7 +24,7 @@ func main() {
 
 	// grpc client
 	c := v1.NewFoobarClient(conn)
-	ctx, cancel := context.WithCancel(context.Background(), 2*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 
 	// call rpc
