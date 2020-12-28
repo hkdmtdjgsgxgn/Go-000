@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -39,7 +40,8 @@ func main() {
 		signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 		select {
 		case sig := <-sigs:
-			log.Printf("\nsignal caught: %s, ready to quit...", sig.String())
+			fmt.Println("")
+			log.Printf("signal caught: %s, ready to quit...", sig.String())
 			cancel()
 		case <-ctx.Done():
 			return ctx.Err()
