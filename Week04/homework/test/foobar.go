@@ -30,7 +30,7 @@ func main() {
 	// call rpc
 	r, err := c.FoobarRpc(ctx, &v1.FoobarRequest{Foo: foo, Bar: bar})
 	if err != nil {
-		log.Fatalf("register user failed: %v", err)
+		log.Fatalf("register foobar failed: %v", err)
 	}
 	log.Printf("register foobar id: %d", r.GetId())
 }

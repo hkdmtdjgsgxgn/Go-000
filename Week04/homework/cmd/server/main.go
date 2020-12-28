@@ -39,7 +39,7 @@ func main() {
 		signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 		select {
 		case sig := <-sigs:
-			log.Printf("signal caught: %s, ready to quit...", sig.String())
+			log.Printf("\nsignal caught: %s, ready to quit...", sig.String())
 			cancel()
 		case <-ctx.Done():
 			return ctx.Err()
