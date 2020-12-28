@@ -1,4 +1,4 @@
-package grpc
+package fb_grpc
 
 import (
 	"context"
