@@ -2,15 +2,19 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
-	"net"
+	"os"
+	"os/signal"
+	"syscall"
 
 	pb "github.com/hi20160616/Go-000/Week04/helloworld/api/helloworld/v1"
-	"google.golang.org/grpc"
+	"github.com/hi20160616/Go-000/Week04/helloworld/internal/pkg/service"
+	"golang.org/x/sync/errgroup"
 )
 
 const (
-	port = ":50051"
+	address = ":50051"
 )
 
 type server struct {
@@ -27,13 +31,38 @@ func (s *server) SayHelloAgain(ctx context.Context, in *pb.HelloRequest) (*pb.He
 }
 
 func main() {
-	lis, err := net.Listen("tcp", port)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-	s := grpc.NewServer()
+	// lis, err := net.Listen("tcp", port)
+	// if err != nil {
+	//         log.Fatalf("failed to listen: %v", err)
+	// }
+	// s := grpc.NewServer()
+	// pb.RegisterGreeterServer(s, &server{})
+	// if err := s.Serve(lis); err != nil {
+	//         log.Fatalf("failed to serve: %v", err)
+	// }
+
+	s := service.NewServer(address)
 	pb.RegisterGreeterServer(s, &server{})
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	g, ctx := errgroup.WithContext(ctx)
+
+	g.Go(func() error { return s.Start(ctx) })
+
+	g.Go(func() error {
+		sigs := make(chan os.Signal, 1)
+		signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+		select {
+		case sig := <-sigs:
+			fmt.Println()
+			log.Printf("signal caught: %s, reday to quit...", sig.String())
+			cancel()
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+		return nil
+	})
+	if err := g.Wait(); err != nil {
+		log.Printf("greeter_server main error: %v", err)
 	}
 }
