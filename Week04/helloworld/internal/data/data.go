@@ -6,17 +6,14 @@ import (
 	"github.com/hi20160616/Go-000/Week04/helloworld/internal/biz"
 )
 
-var _ biz.HelloRepo = new(helloRepo)
+var _ biz.GreeterRepo = new(greeterRepo)
 
-type helloRepo struct{}
+type greeterRepo struct{}
 
-const defaultID = 100
-
-func NewHelloRepo() biz.HelloRepo {
-	return &helloRepo{}
+func (g *greeterRepo) SayHi(biz.Greeter) {
+	log.Printf("Hi there! data!")
 }
 
-func (hr *helloRepo) GetID(h *biz.Hello) int32 {
-	log.Printf("Got hello, name: %s, age: %d, id: %d", h.Name, h.Age, h.ID)
-	return defaultID
+func NewGreeterRepo() biz.GreeterRepo {
+	return &greeterRepo{}
 }

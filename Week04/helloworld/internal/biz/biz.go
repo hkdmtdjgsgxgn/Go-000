@@ -1,24 +1,23 @@
 package biz
 
-type Hello struct {
+type Greeter struct {
 	ID   int32
 	Name string
-	Age  int32
+	Msg  string
 }
 
-type HelloRepo interface {
-	GetID(*Hello) int32
+type GreeterCase struct {
+	repo GreeterRepo
 }
 
-type HelloCase struct {
-	repo HelloRepo
+type GreeterRepo interface {
+	SayHi(*Greeter)
 }
 
-func NewHelloCase(repo HelloRepo) *HelloCase {
-	return &HelloCase{repo: repo}
+func (g *GreeterCase) SayHiThere(gg *Greeter) {
+	g.repo.SayHi(gg)
 }
 
-func (hc *HelloCase) GetID(h *Hello) {
-	id := hc.repo.GetID(h)
-	h.ID = id
+func NewGreeterCase(repo GreeterRepo) *GreeterCase {
+	return &GreeterCase{repo: repo}
 }
